@@ -26,15 +26,23 @@ Route::post("login",[ApiController::class,"login"]);
 Route::post("tambah",[PostController::class,"tambah"]);
 Route::post("edit/{id}",[PostController::class,"edit"]);
 ROute::delete("delete/{id}", [PostController::class, "delete"]);
+Route::delete('deleteAbsen/{id}', [ApiController::class, 'deleteAbsen']);
 
+Route::get('absen', [ApiController::class, 'absen']);
 Route::group(
     [
         "middleware" => ["auth:api"]
     ], function(){
+
+        Route::post('storeAbsen', [ApiController::class, 'storeAbsen']);
         Route::get("profile", [ApiController::class, "profile"]);
         Route::get("refresh", [ApiController::class, "refreshToken"]);
         Route::get("logout", [ApiController::class, "logout"]);
     }
 );
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 Route::apiResource('/posts', App\Http\Controllers\Api\PostController::class);
